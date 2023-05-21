@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './Start.css'
+import './App.css'
 
-function Start() {
-
+function Start(props) {
     return (
     <>
         <div>
@@ -19,7 +18,8 @@ function Start() {
 
         <h1>Quizzical Project</h1>
         <h3>Put your trivia knowledge to the test!</h3>
-        <button className='start-button'>
+        <button className='start-button'
+        onClick={props.startQuiz}>
             Start Quiz
         </button>
     </>
