@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 function Questions(props) {
-    console.log(props)
-
+    console.log(props.data)
     return (
         <>
             <div className="question-container">

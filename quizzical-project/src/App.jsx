@@ -5,23 +5,20 @@ import Questions from './Questions'
 function App() {
 
   const [quiz, setQuiz] = useState(false)
-    
-    function startQuizBtn() {
-      // Make it flip the boolean later  
-      setQuiz(true)
-      getQuizData()
-    }
+  const [quizData, setQuizData] = useState()
 
-    async function getQuizData() {
-        const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
-        const quizData = await res.json()
-        return quizData
-    }
+  async function getQuizData() {
+      const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+      const data = await res.json()
+      .catch(error => console.log(error))
+      setQuiz(true)
+      setQuizData(data)
+  }
 
   return (
     <>
-      {!quiz && <Start startQuiz={startQuizBtn}/>}
-      {quiz && <Questions />}
+      {!quiz && <Start startQuiz={getQuizData}/>}
+      {quiz && <Questions data={quizData.results}/>}
     </> 
   )
 }
