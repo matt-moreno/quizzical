@@ -5,7 +5,7 @@ import Questions from './Questions'
 function App() {
 
   const [quiz, setQuiz] = useState(false)
-  const [quizData, setQuizData] = useState()
+  const [quizData, setQuizData] = useState("")
 
   async function getQuizData() {
       const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
