@@ -1,5 +1,6 @@
 import { useState, useEffect} from 'react'
 import Start from "./Start"
+import uuid from 'react-uuid'
 import Questions from './Questions'
 
 function App() {
@@ -15,10 +16,22 @@ function App() {
       setQuizData(data)
   }
 
+  const questionElement = quiz ? 
+  quizData.results.map(question => {
+    return (
+      <Questions
+      key={uuid()}
+      question={question.question}
+      correctAnswer={question.correct_answer}
+      incorrectAnswer={question.incorrect_answers} />
+    )
+  })
+  : quiz
+
   return (
     <>
       {!quiz && <Start startQuiz={getQuizData}/>}
-      {quiz && <Questions data={quizData.results}/>}
+      {questionElement}
     </> 
   )
 }
