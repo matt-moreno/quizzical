@@ -4,26 +4,22 @@ import uuid from 'react-uuid'
 import './App.css'
 
 function Questions(props) {
-    // const triviaQuestions = props.data.map(trivia => {
-        
-    //     const questionsArr = [trivia.correct_answer, 
-    //     trivia.incorrect_answers[0], 
-    //     trivia.incorrect_answers[1], 
-    //     trivia.incorrect_answers[2]]
-        
-    //     const randomizedQuestions = questionsArr.sort((a, b) => 0.5 - Math.random())
-        
-    //     console.log(randomizedQuestions)
-    console.log(props)
+    const questions = [
+        props.correctAnswer,
+        props.incorrectAnswer[0],
+        props.incorrectAnswer[1],
+        props.incorrectAnswer[2]
+    ].sort((a, b) => 0.5 - Math.random())
+
     return (
         <div className="question-container">
-            <p>{decode(props.question)}</p>
-            <div className='answer-container'>             
-                <button></button>
-                <button></button>
-                <button></button>
-                <button></button>
-            </div>
+            <label htmlFor={props.id}>{decode(props.question)}</label>
+            <select id={props.id} className='answer-container'>             
+                <option>{decode(questions[0])}</option>
+                <option>{decode(questions[1])}</option>
+                <option>{decode(questions[2])}</option>
+                <option>{decode(questions[3])}</option>
+            </select>
         </div>
     )
 }
