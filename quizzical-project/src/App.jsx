@@ -21,6 +21,7 @@ function App() {
     return (
       <Questions
       key={uuid()}
+      id={uuid()}
       question={question.question}
       correctAnswer={question.correct_answer}
       incorrectAnswer={question.incorrect_answers} />
@@ -32,6 +33,7 @@ function App() {
     <>
       {!quiz && <Start startQuiz={getQuizData}/>}
       {questionElement}
+      {quiz && <button>Check answers</button>}
     </> 
   )
 }
