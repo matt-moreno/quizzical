@@ -13,13 +13,13 @@ function Questions(props) {
 
     return (
         <div className="question-container">
-            <label htmlFor={props.id}>{decode(props.question)}</label>
-            <select id={props.id} className='answer-container'>             
-                <option>{decode(questions[0])}</option>
-                <option>{decode(questions[1])}</option>
-                <option>{decode(questions[2])}</option>
-                <option>{decode(questions[3])}</option>
-            </select>
+            <p>{decode(props.question)}</p>
+            <div className='answer-container'>             
+                <button>{decode(questions[0])}</button>
+                <button>{decode(questions[1])}</button>
+                <button>{decode(questions[2])}</button>
+                <button>{decode(questions[3])}</button>
+            </div>
         </div>
     )
 }
