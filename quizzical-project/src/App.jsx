@@ -7,11 +7,33 @@ function App() {
 
   const [quiz, setQuiz] = useState(false)
   const [quizData, setQuizData] = useState("")
+  // Add a count state that will fetch a new quiz everytime the count is increased
+  // const [count, setCount] = useState(0)
+
+  // Wrap the function below in a UseEffect that will update each time the count is updated.
+  // useEffect(() => {
+  // Add GET request here 
+  // }, [count])
+
 
   async function getQuizData() {
+    // Add &encode=base64 to API call to hide the API data in the console
       const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
       const data = await res.json()
       .catch(error => console.log(error))
+
+      let questionsArray = []
+      data.results.map(question => {
+        questionsArray.push({
+          id: uuid(),
+          answers: ([...question.incorrect_answers, question.correct_answer]),
+          question: question.question, 
+          correct: question.correct_answer,
+          selected: null, 
+          checked:false})
+        })
+      console.log(questionsArray)
+      
       setQuiz(true)
       setQuizData(data)
   }
