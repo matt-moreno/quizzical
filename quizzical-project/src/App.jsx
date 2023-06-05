@@ -6,15 +6,20 @@ import Questions from './Questions'
 function App() {
 
   const [quiz, setQuiz] = useState(false)
-  const [quizData, setQuizData] = useState("")
+  const [quizData, setQuizData] = useState([])
   // Add a count state that will fetch a new quiz everytime the count is increased
   // const [count, setCount] = useState(0)
+
+  // Add a checked state that defaults to false. If the checked state is false you can check your answers
+  // If the checked state is true you can play again
+  // const [checked, setChecked] = useState(false)
 
   // Wrap the function below in a UseEffect that will update each time the count is updated.
   // useEffect(() => {
   // Add GET request here 
   // }, [count])
 
+  const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
 
   async function getQuizData() {
     // Add &encode=base64 to API call to hide the API data in the console
@@ -26,27 +31,33 @@ function App() {
       data.results.map(question => {
         questionsArray.push({
           id: uuid(),
-          answers: ([...question.incorrect_answers, question.correct_answer]),
+          answers: shuffleArray([...question.incorrect_answers, question.correct_answer]),
           question: question.question, 
           correct: question.correct_answer,
           selected: null, 
           checked:false})
         })
-      console.log(questionsArray)
-      
+
       setQuiz(true)
-      setQuizData(data)
+      setQuizData(questionsArray)
+  }
+
+  function handleClickAnswer(id, answer) {
+    setQuizData(prevQuestions => prevQuestions.map(question => {
+      return question.id === id ? {...question, selected: answer} : question
+    }))
   }
 
   const questionElement = quiz ? 
-  quizData.results.map(question => {
+  quizData.map(question => {
     return (
       <Questions
-      key={uuid()}
-      id={uuid()}
+      key={question.id}
+      id={question.id}
+      handleClickAnswer={handleClickAnswer}
       question={question.question}
-      correctAnswer={question.correct_answer}
-      incorrectAnswer={question.incorrect_answers} />
+      answers={question.answers} 
+      />
     )
   })
   : quiz
@@ -55,7 +66,7 @@ function App() {
     <>
       {!quiz && <Start startQuiz={getQuizData}/>}
       {questionElement}
-      {quiz && <button>Check answers</button>}
+      {quiz && <button className="check-btn">Check answers</button>}
     </> 
   )
 }
