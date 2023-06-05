@@ -7,17 +7,8 @@ function App() {
 
   const [quiz, setQuiz] = useState(false)
   const [quizData, setQuizData] = useState([])
-  // Add a count state that will fetch a new quiz everytime the count is increased
-  // const [count, setCount] = useState(0)
-
-  // Add a checked state that defaults to false. If the checked state is false you can check your answers
-  // If the checked state is true you can play again
-  // const [checked, setChecked] = useState(false)
-
-  // Wrap the function below in a UseEffect that will update each time the count is updated.
-  // useEffect(() => {
-  // Add GET request here 
-  // }, [count])
+  const [checked, setChecked] = useState(false)
+  const [correct, setCorrect] = useState(0)
 
   const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
 
@@ -35,10 +26,11 @@ function App() {
           question: question.question, 
           correct: question.correct_answer,
           selected: null, 
-          checked:false})
+          checked: false})
         })
 
       setQuiz(true)
+      setChecked(false)
       setQuizData(questionsArray)
   }
 
@@ -48,15 +40,42 @@ function App() {
     }))
   }
 
+  // STUDY THIS FUNCTION TO UNDERSTAND HOW THE CHECK WORKS
+  function handleCheck() {
+    let selected = true
+    quizData.forEach(question =>{
+      if (question.selected === null){
+        selected = false
+        return
+      }
+    })
+
+    if (!selected){
+      return
+    }
+    
+    setQuizData(prevQuestions => prevQuestions.map(question => {
+      return {...question, checked:true}
+    }))
+    setChecked(true)
+    
+    let correct = 0
+    quizData.forEach(question =>{
+      if (question.correct === question.selected){
+        correct += 1
+      }
+    })
+    setCorrect(correct)
+  }
+
   const questionElement = quiz ? 
   quizData.map(question => {
     return (
       <Questions
       key={question.id}
       id={question.id}
+      data={question}
       handleClickAnswer={handleClickAnswer}
-      question={question.question}
-      answers={question.answers} 
       />
     )
   })
@@ -66,7 +85,12 @@ function App() {
     <>
       {!quiz && <Start startQuiz={getQuizData}/>}
       {questionElement}
-      {quiz && <button className="check-btn">Check answers</button>}
+      {checked && <div className="score">You scored {correct}/5 correct answers</div>}
+      {quiz && <button 
+      className="check-btn"
+      onClick={checked ? getQuizData : handleCheck}>
+        {checked ? "Play again" : "Check answers"}
+        </button>}
     </> 
   )
 }
