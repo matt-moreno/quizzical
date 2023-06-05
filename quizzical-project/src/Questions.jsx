@@ -1,16 +1,36 @@
-import { useState, useEffect } from 'react'
 import {decode} from 'html-entities';
 import uuid from 'react-uuid'
 import './index.css'
 
 function Questions(props) {
 
-    const answersElement = props.answers.map(answer => {
+    function handleClick(answer){
+        if (props.data.checked){
+          return
+        }
+        props.handleClickAnswer(props.id, answer)
+      }
+
+    const answersElement = props.data.answers.map(answer => {
+        
+        let id = null
+        if (props.data.checked) {
+        if (props.data.correct === answer) {
+            id = 'correct'
+        } else if (props.data.selected === answer) {
+            id = 'incorrect'
+        } else {
+            id = 'not-selected'
+        }
+        }
+
         return (
             <button
             key={uuid()}
-            onClick={() => props.handleClickAnswer(props.id, answer)}
-            className="answer-btn">
+            id={id}
+            onClick={() => handleClick(answer)}
+            // STUDY BELOW TO UNDERSTAND HOW THE SELECTED BUTTON WORKS
+            className={answer === props.data.selected ? "answer-btn selected" : "answer-btn"}>
                 {decode(answer)}
             </button>
         )
@@ -18,8 +38,8 @@ function Questions(props) {
 
     return (
         <div className="question-container">
-            <p>{decode(props.question)}</p>
-            <div className='answer-container'>             
+            <p>{decode(props.data.question)}</p>
+            <div className="answer-container">             
                 {answersElement}
             </div>
         </div>
