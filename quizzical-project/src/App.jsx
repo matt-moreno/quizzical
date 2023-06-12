@@ -13,8 +13,7 @@ function App() {
   const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
 
   async function getQuizData() {
-    // Add &encode=base64 to API call to hide the API data in the console
-      const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+      const res = await fetch("https://opentdb.com/api.php?amount=5&type=multiple&encode=base64")
       const data = await res.json()
       .catch(error => console.log(error))
 
@@ -34,14 +33,17 @@ function App() {
       setQuizData(questionsArray)
   }
 
+  // Adds the answer to the selected property in the quizData state. 
   function handleClickAnswer(id, answer) {
     setQuizData(prevQuestions => prevQuestions.map(question => {
       return question.id === id ? {...question, selected: answer} : question
     }))
   }
 
-  // STUDY THIS FUNCTION TO UNDERSTAND HOW THE CHECK WORKS
   function handleCheck() {
+    // Error handling. If the question isn't selected don't run the check.
+    // This part maps through each question and will set the selected boolean to false if
+    // something isn't selected.
     let selected = true
     quizData.forEach(question =>{
       if (question.selected === null){
@@ -50,15 +52,21 @@ function App() {
       }
     })
 
+    // This part then prevents the handle check functionality from running if it hasn't been selected. 
     if (!selected){
       return
     }
     
+    // Sets the checked boolean to true so that the Questions component knows if the selected answer was
+    // correct or incorrect. 
     setQuizData(prevQuestions => prevQuestions.map(question => {
       return {...question, checked:true}
     }))
+
+    // Sets the checked state to true so that the conditional elements below render.
     setChecked(true)
-    
+
+    // Increases the count if the selected question matches the correct question. 
     let correct = 0
     quizData.forEach(question =>{
       if (question.correct === question.selected){
@@ -68,6 +76,7 @@ function App() {
     setCorrect(correct)
   }
 
+  // Checks if Quiz is true then maps over the quizData to render the Questions components
   const questionElement = quiz ? 
   quizData.map(question => {
     return (
