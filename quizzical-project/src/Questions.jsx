@@ -1,10 +1,10 @@
-import {decode} from 'html-entities';
 import uuid from 'react-uuid'
 import './index.css'
 
 function Questions(props) {
 
     function handleClick(answer){
+        // Prevents elements from being selected after the handleCheck function is ran. 
         if (props.data.checked){
           return
         }
@@ -12,7 +12,7 @@ function Questions(props) {
       }
 
     const answersElement = props.data.answers.map(answer => {
-        
+        // Passes in the correct element ID after handle check is ran. 
         let id = null
         if (props.data.checked) {
         if (props.data.correct === answer) {
@@ -29,16 +29,16 @@ function Questions(props) {
             key={uuid()}
             id={id}
             onClick={() => handleClick(answer)}
-            // STUDY BELOW TO UNDERSTAND HOW THE SELECTED BUTTON WORKS
+            // If the answer button matches the selected answer, it will have the selected class
             className={answer === props.data.selected ? "answer-btn selected" : "answer-btn"}>
-                {decode(answer)}
+                {atob(answer)}
             </button>
         )
     })
 
     return (
         <div className="question-container">
-            <p>{decode(props.data.question)}</p>
+            <p>{atob(props.data.question)}</p>
             <div className="answer-container">             
                 {answersElement}
             </div>
