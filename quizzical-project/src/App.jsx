@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react'
 import Start from "./Start"
 import uuid from 'react-uuid'
 import Questions from './Questions'
+import uuid from 'react-uuid'
 
 function App() {
 
