@@ -1,37 +1,48 @@
-import { useState, useEffect } from 'react'
-import {decode} from 'html-entities';
 import uuid from 'react-uuid'
-import './App.css'
+import './index.css'
 
 function Questions(props) {
-    const triviaQuestions = props.data.map(trivia => {
-        
-        const questions = [
-            trivia.correct_answer, 
-            trivia.incorrect_answers[0], 
-            trivia.incorrect_answers[1], 
-            trivia.incorrect_answers[2]
-        ].sort((a, b) => 0.5 - Math.random())
-        
+
+    function handleClick(answer){
+        // Prevents elements from being selected after the handleCheck function is ran. 
+        if (props.data.checked){
+          return
+        }
+        props.handleClickAnswer(props.id, answer)
+      }
+
+    const answersElement = props.data.answers.map(answer => {
+        // Passes in the correct element ID after handle check is ran. 
+        let id = null
+        if (props.data.checked) {
+        if (props.data.correct === answer) {
+            id = 'correct'
+        } else if (props.data.selected === answer) {
+            id = 'incorrect'
+        } else {
+            id = 'not-selected'
+        }
+        }
+
         return (
-        <div className="question-container" key={uuid()} id={uuid()}>
-            <p>{decode(trivia.question)}</p>
-            <div className='answer-container'>
-                <button onClick={props.handleClick}>{decode(questions[0])}</button>
-                <button onClick={props.handleClick}>{decode(questions[1])}</button>
-                <button onClick={props.handleClick}>{decode(questions[2])}</button>
-                <button onClick={props.handleClick}>{decode(questions[3])}</button>
-            </div>
-        </div>
+            <button
+            key={uuid()}
+            id={id}
+            onClick={() => handleClick(answer)}
+            // If the answer button matches the selected answer, it will have the selected class
+            className={answer === props.data.selected ? "answer-btn selected" : "answer-btn"}>
+                {atob(answer)}
+            </button>
         )
     })
+
     return (
-        <>
-            {triviaQuestions}
-            <button className='start-button'>
-                Check answers
-            </button>
-        </>
+        <div className="question-container">
+            <p>{atob(props.data.question)}</p>
+            <div className="answer-container">             
+                {answersElement}
+            </div>
+        </div>
     )
 }
 
